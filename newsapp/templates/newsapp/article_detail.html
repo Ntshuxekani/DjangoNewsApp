@@ -1,0 +1,13 @@
+{% extends 'newsapp/base.html' %}
+
+{% block content %}
+<h2>{{ article.title }}</h2>
+<p>{{ article.created_at|date:"M d, Y H:i" }}</p>
+
+{% if article.image %}
+<img src="{{ article.image.url }}" class="article-detail-image">
+{% endif %}
+
+<p>{{ article.content }}</p>
+
+{% endblock %}

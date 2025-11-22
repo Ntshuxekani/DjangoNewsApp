@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News App</title>
+    <link rel="stylesheet" href="{% static 'newsapp/styles.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-center">
+            <a class="logo" href="/">Yinhla Yeru News</a>
+        </div>
+
+        <div class="nav-right">
+            {% if request.path != "/" %}
+                <a href="/" class="nav-link">Home</a>
+            {% endif %}
+
+            {% if request.path != "/subscribe/" %}
+                <a href="/subscribe/" class="nav-button">Subscribe</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container fade-in">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 Yinhla Yeru News - Powered by Django</p>
+    </footer>
+</body>
+</html>

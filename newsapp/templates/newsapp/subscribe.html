@@ -1,0 +1,15 @@
+{% extends "newsapp/base.html" %}
+
+{% block content %}
+<h2 class="section-title">Subscribe for Daily News</h2>
+
+<form method="POST" class="subscribe-form">
+    {% csrf_token %}
+    <input type="email" name="email" placeholder="Enter your email address" required>
+    <button type="submit">Subscribe</button>
+</form>
+
+{% if message %}
+<p class="success-message">{{ message }}</p>
+{% endif %}
+{% endblock %}
