@@ -1,89 +1,75 @@
 {% extends "newsapp/base.html" %}
 {% load static %}
-
+ 
 {% block content %}
-
+ 
 <h2 class="section-title">Latest News</h2>
-
+ 
 <!-- SEARCH BAR -->
 <form method="GET" class="search-container">
-    <input 
+<input 
         type="text" 
         name="q" 
         placeholder="Search news..." 
         value="{{ request.GET.q }}" 
         class="search-input"
     />
-    <button type="submit" class="search-btn">Search</button>
+<button type="submit" class="search-btn">Search</button>
 </form>
-
-<!-- CATEGORY FILTER -->
-<div class="category-menu">
-    <a href="/" class="category-btn">All</a>
-    {% for cat in categories %}
-        <a href="?category={{ cat.id }}" class="category-btn">{{ cat.name }}</a>
-    {% endfor %}
-</div>
-
+ 
+{% if not articles and not api_news %}
+<p class="no-results">No results found.</p>
+{% endif %}
+ 
 <!-- LOCAL ARTICLES -->
 {% for article in articles %}
 <div class="article-card">
-    <div class="article-content">
-        <h3>
-            <a href="{% url 'article_detail' article.id %}" class="article-title">
+<div class="article-content">
+<h3>
+<a href="{% url 'article_detail' article.id %}" class="article-title">
                 {{ article.title }}
-            </a>
-        </h3>
-
-        <p class="article-date">{{ article.created_at|date:"M d, Y H:i" }}</p>
-
+</a>
+</h3>
+<p class="article-date">{{ article.created_at|date:"M d, Y H:i" }}</p>
+ 
         {% if article.category %}
-            <span class="category-tag">{{ article.category.name }}</span>
+<span class="category-tag">{{ article.category.name }}</span>
         {% endif %}
-
+ 
         <p class="article-text">{{ article.content|truncatechars:180 }}</p>
-
-        <!-- ⭐ READ MORE BUTTON FOR LOCAL ARTICLES ⭐ -->
-        <a href="{% url 'article_detail' article.id %}" class="read-more-btn">
-            Read More →
-        </a>
-    </div>
-
+ 
+        <a href="{% url 'article_detail' article.id %}" class="read-more-btn">Read More →</a>
+</div>
+ 
     {% if article.image %}
-        <img src="{{ article.image.url }}" class="article-image">
+<img src="{{ article.image.url }}" class="article-image">
     {% endif %}
 </div>
 {% endfor %}
-
+ 
 <!-- API NEWS SECTION -->
 <h2 class="section-title">Global News</h2>
-
+ 
 {% if api_news %}
     {% for item in api_news %}
-        <div class="article-card">
-            <div class="article-content">
-                <h3 class="article-title">{{ item.title }}</h3>
-                <p class="article-date">{{ item.published }}</p>
-
+<div class="article-card">
+<div class="article-content">
+<h3 class="article-title">{{ item.title }}</h3>
+<p class="article-date">{{ item.published }}</p>
+ 
                 <p class="article-text">
                     {{ item.description|default:item.content|truncatechars:200 }}
-                </p>
-
-                <!-- ⭐ OPTIONAL READ MORE BUTTON FOR API NEWS ⭐ -->
-                {% if item.url %}
-                    <a href="{{ item.url }}" target="_blank" class="read-more-btn">
-                        Read More →
-                    </a>
-                {% endif %}
+</p>
+ 
             </div>
-
+ 
             {% if item.image %}
-                <img src="{{ item.image }}" class="article-image">
+<img src="{{ item.image }}" class="article-image">
             {% endif %}
-        </div>
+</div>
     {% endfor %}
 {% else %}
-    <p>No results found</p>
+<p>No API news available.</p>
 {% endif %}
-
+ 
 {% endblock %}

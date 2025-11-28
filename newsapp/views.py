@@ -51,52 +51,76 @@ def fetch_api_news():
 # HOME VIEW (LOCAL + API NEWS)
 
 def home(request):
+
     search_query = request.GET.get("q", "")
+
     category_id = request.GET.get("category", "")
+ 
+    # ALL published articles
 
-    # Local news
     articles = NewsArticle.objects.filter(is_published=True).order_by("-created_at")
+
     categories = Category.objects.all()
+ 
+    # Trending = most viewed
 
-    # Search for local DB news
+    trending = NewsArticle.objects.filter(is_published=True).order_by("-views")[:5]
+ 
+    # Latest = newest
+
+    latest = NewsArticle.objects.filter(is_published=True).order_by("-created_at")[:5]
+ 
+    # SEARCH
+
     if search_query:
+
         articles = articles.filter(
+
             Q(title__icontains=search_query) |
+
             Q(content__icontains=search_query)
+
         )
+ 
+    # CATEGORY FILTER
 
-    # Category filtering
     if category_id:
+
         articles = articles.filter(category_id=category_id)
-
+ 
     breaking_alert = BreakingAlert.objects.filter(is_active=True).first()
+ 
+    # EXTERNAL API NEWS — from utils.py
 
-    # Pull external API news
-    api_news = fetch_api_news() or []
-
-    # Search inside API news too
-    if search_query:
-        api_news = [
-            item for item in api_news
-            if search_query.lower() in (item.get("title") or "").lower()
-            or search_query.lower() in (item.get("description") or "").lower()
-        ]
-
+    api_news = fetch_api_news()
+ 
     return render(request, "newsapp/home.html", {
-        "articles": articles,
-        "api_news": api_news,
-        "categories": categories,
-        "breaking_alert": breaking_alert,
-        "search_query": search_query,
-        "selected_category": category_id,
-    })
 
+        "articles": articles,
+
+        "api_news": api_news,
+
+        "categories": categories,
+
+        "trending": trending,
+
+        "latest": latest,
+
+        "breaking_alert": breaking_alert,
+
+        "search_query": search_query,
+
+        "selected_category": category_id,
+
+    })
+ 
 
 # ARTICLE DETAIL VIEW
 def article_detail(request, pk):
-    article = get_object_or_404(NewsArticle, pk=pk, is_published=True)
+    article = get_object_or_404(NewsArticle, pk=pk)
+    article.views += 1
+    article.save()
     return render(request, "newsapp/article_detail.html", {"article": article})
-
 
 # SUBSCRIBE VIEW
 def subscribe(request):
