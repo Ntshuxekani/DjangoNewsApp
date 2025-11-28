@@ -265,3 +265,89 @@ body {
 .read-more-btn:hover {
     background: #005fcc;
 }
+
+.layout {
+
+    display: flex;
+
+    gap: 20px;
+
+}
+ 
+.sidebar {
+
+    width: 250px;
+
+    background: #ffffff;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+    height: fit-content;
+
+}
+ 
+.sidebar h3 {
+
+    margin-top: 20px;
+
+    font-size: 18px;
+
+    border-bottom: 2px solid #eee;
+
+    padding-bottom: 5px;
+
+}
+ 
+.sidebar ul {
+
+    list-style: none;
+
+    padding: 0;
+
+}
+ 
+.sidebar li {
+
+    margin: 8px 0;
+
+}
+ 
+.sidebar a {
+
+    text-decoration: none;
+
+    color: #333;
+
+    transition: 0.2s;
+
+}
+ 
+.sidebar a:hover {
+
+    color: #0066ff;
+
+}
+ 
+.subscribe-btn {
+
+    display: block;
+
+    padding: 10px;
+
+    background: #0066ff;
+
+    color: #fff;
+
+    text-align: center;
+
+    border-radius: 8px;
+
+    margin-top: 10px;
+
+}
+
+ 

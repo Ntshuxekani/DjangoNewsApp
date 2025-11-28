@@ -1,36 +1,64 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>News App</title>
-    <link rel="stylesheet" href="{% static 'newsapp/styles.css' %}">
+<meta charset="UTF-8">
+<title>News Platform</title>
+<link rel="stylesheet" href="{% static 'newsapp/styles.css' %}">
 </head>
-
 <body>
-    <nav class="navbar">
-        <div class="nav-center">
-            <a class="logo" href="/">Yinhla Yeru News</a>
-        </div>
-
-        <div class="nav-right">
-            {% if request.path != "/" %}
-                <a href="/" class="nav-link">Home</a>
-            {% endif %}
-
-            {% if request.path != "/subscribe/" %}
-                <a href="/subscribe/" class="nav-button">Subscribe</a>
-            {% endif %}
-        </div>
-    </nav>
-
-    <div class="container fade-in">
-        {% block content %}{% endblock %}
-    </div>
-
-    <footer class="footer">
-        <p>© 2025 Yinhla Yeru News - Powered by Django</p>
-    </footer>
+ 
+<div class="layout">
+ 
+    <!-- SIDEBAR -->
+<aside class="sidebar">
+<h2 class="sidebar-title">Menu</h2>
+ 
+        <!-- Categories -->
+<h3>Categories</h3>
+<ul>
+<li><a href="/">All</a></li>
+            {% for cat in categories %}
+<li><a href="?category={{ cat.id }}">{{ cat.name }}</a></li>
+            {% endfor %}
+</ul>
+ 
+        <!-- Trending -->
+<h3>Trending</h3>
+<ul>
+            {% for item in trending %}
+<li>
+<a href="{% url 'article_detail' item.id %}">
+                        {{ item.title|truncatechars:40 }}
+</a>
+</li>
+            {% endfor %}
+</ul>
+ 
+        <!-- Latest -->
+<h3>Latest</h3>
+<ul>
+            {% for item in latest %}
+<li>
+<a href="{% url 'article_detail' item.id %}">
+                        {{ item.title|truncatechars:40 }}
+</a>
+</li>
+            {% endfor %}
+</ul>
+ 
+        <!-- Subscribe -->
+<h3>Subscribe</h3>
+<a href="/subscribe/" class="subscribe-btn">Join Newsletter</a>
+</aside>
+ 
+    <!-- MAIN CONTENT -->
+<main class="content-area">
+        {% block content %}
+        {% endblock %}
+</main>
+ 
+</div>
+ 
 </body>
 </html>
