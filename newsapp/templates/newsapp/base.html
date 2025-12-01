@@ -2,63 +2,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>News Platform</title>
-<link rel="stylesheet" href="{% static 'newsapp/styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Yinhla Yerhu News App{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'newsapp/styles.css' %}">
 </head>
 <body>
- 
-<div class="layout">
- 
-    <!-- SIDEBAR -->
-<aside class="sidebar">
-<h2 class="sidebar-title">Menu</h2>
- 
-        <!-- Categories -->
-<h3>Categories</h3>
-<ul>
-<li><a href="/">All</a></li>
-            {% for cat in categories %}
-<li><a href="?category={{ cat.id }}">{{ cat.name }}</a></li>
-            {% endfor %}
-</ul>
- 
-        <!-- Trending -->
-<h3>Trending</h3>
-<ul>
-            {% for item in trending %}
-<li>
-<a href="{% url 'article_detail' item.id %}">
-                        {{ item.title|truncatechars:40 }}
-</a>
-</li>
-            {% endfor %}
-</ul>
- 
-        <!-- Latest -->
-<h3>Latest</h3>
-<ul>
-            {% for item in latest %}
-<li>
-<a href="{% url 'article_detail' item.id %}">
-                        {{ item.title|truncatechars:40 }}
-</a>
-</li>
-            {% endfor %}
-</ul>
- 
-        <!-- Subscribe -->
-<h3>Subscribe</h3>
-<a href="/subscribe/" class="subscribe-btn">Join Newsletter</a>
-</aside>
- 
-    <!-- MAIN CONTENT -->
-<main class="content-area">
-        {% block content %}
-        {% endblock %}
-</main>
- 
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <h2 class="sidebar-title">Yinhla Yerhu</h2>
+
+    <a href="{% url 'home' %}"> Home</a>
+    <a href="{% url 'all_news' %}"> All News</a>
+    <a href="{% url 'categories' %}"> Categories</a>
+    <a href="{% url 'trending' %}"> Trending</a>
+    <a href="{% url 'favourites' %}"> Favorites</a>
+    <a href="{% url 'subscribe' %}"> Subscribe</a>
 </div>
- 
+
+<!-- Top Bar (Mobile + Dark Mode + Collapse Button) -->
+<div class="top-bar">
+    <button id="sidebarToggle" class="menu-btn">☰</button>
+    <button id="darkModeToggle" class="dark-btn">🌙</button>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent" class="main-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<script>
+    // Sidebar Collapse / Expand
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    toggleBtn.onclick = () => {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('collapsed');
+    };
+
+    // Dark Mode Toggle
+    const darkToggle = document.getElementById('darkModeToggle');
+    darkToggle.onclick = () => {
+        document.body.classList.toggle('dark-mode');
+    };
+</script>
+
 </body>
 </html>

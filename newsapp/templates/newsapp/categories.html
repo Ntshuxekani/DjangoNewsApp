@@ -1,0 +1,57 @@
+{% extends "newsapp/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <h1 class="page-title">📂 News Categories</h1>
+    <p class="intro-text">Select a category below to explore curated news.</p>
+
+    {% if categories %}
+        <div class="category-list">
+            {% for cat, items in categories.items %}
+                <div class="category-section">
+                    <h2 class="category-title">📌 {{ cat|title }}</h2>
+
+                    {% if items %}
+                        <div class="news-grid">
+                            {% for article in items %}
+                                <div class="news-card">
+
+                                    {% if article.urlToImage %}
+                                        <img src="{{ article.urlToImage }}" alt="News Image" class="news-image">
+                                    {% else %}
+                                        <img src="{% static 'images/no-image.jpg' %}" alt="No Image" class="news-image">
+                                    {% endif %}
+
+                                    <h3>{{ article.title }}</h3>
+
+                                    {% if article.description %}
+                                        <p>{{ article.description }}</p>
+                                    {% else %}
+                                        <p>No description available.</p>
+                                    {% endif %}
+
+                                    <a href="{{ article.url }}" target="_blank" class="btn-main">
+                                        Read Full Article
+                                    </a>
+
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>No articles found for this category.</p>
+                    {% endif %}
+
+                </div>
+                <hr class="category-divider">
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No categories found.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
