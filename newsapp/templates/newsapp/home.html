@@ -1,75 +1,46 @@
 {% extends "newsapp/base.html" %}
 {% load static %}
- 
+
 {% block content %}
- 
-<h2 class="section-title">Latest News</h2>
- 
-<!-- SEARCH BAR -->
-<form method="GET" class="search-container">
-<input 
-        type="text" 
-        name="q" 
-        placeholder="Search news..." 
-        value="{{ request.GET.q }}" 
-        class="search-input"
-    />
-<button type="submit" class="search-btn">Search</button>
-</form>
- 
-{% if not articles and not api_news %}
-<p class="no-results">No results found.</p>
-{% endif %}
- 
-<!-- LOCAL ARTICLES -->
-{% for article in articles %}
-<div class="article-card">
-<div class="article-content">
-<h3>
-<a href="{% url 'article_detail' article.id %}" class="article-title">
-                {{ article.title }}
-</a>
-</h3>
-<p class="article-date">{{ article.created_at|date:"M d, Y H:i" }}</p>
- 
-        {% if article.category %}
-<span class="category-tag">{{ article.category.name }}</span>
-        {% endif %}
- 
-        <p class="article-text">{{ article.content|truncatechars:180 }}</p>
- 
-        <a href="{% url 'article_detail' article.id %}" class="read-more-btn">Read More →</a>
-</div>
- 
-    {% if article.image %}
-<img src="{{ article.image.url }}" class="article-image">
-    {% endif %}
-</div>
-{% endfor %}
- 
-<!-- API NEWS SECTION -->
-<h2 class="section-title">Global News</h2>
- 
-{% if api_news %}
-    {% for item in api_news %}
-<div class="article-card">
-<div class="article-content">
-<h3 class="article-title">{{ item.title }}</h3>
-<p class="article-date">{{ item.published }}</p>
- 
-                <p class="article-text">
-                    {{ item.description|default:item.content|truncatechars:200 }}
-</p>
- 
+
+<div class="home-container">
+
+    <h1 class="page-title">Welcome to Yinhla Yerhu News App</h1>
+    <p class="intro-text">Stay updated with the latest stories, trends, and categories.</p>
+
+    <!-- Latest News Section -->
+    <section class="section-block">
+        <h2>📰 Latest News</h2>
+
+        {% if latest_news %}
+            <div class="news-grid">
+                {% for article in latest_news %}
+                    <div class="news-card">
+                        <h3>{{ article.title }}</h3>
+                        <p>{{ article.description|default:"No description available." }}</p>
+                        <a href="{{ article.url }}" target="_blank" class="btn-read">Read More</a>
+                    </div>
+                {% endfor %}
             </div>
- 
-            {% if item.image %}
-<img src="{{ item.image }}" class="article-image">
-            {% endif %}
+        {% else %}
+            <p>No latest news available.</p>
+        {% endif %}
+    </section>
+
+    <!-- Trending Section -->
+    <section class="section-block">
+        <h2>🔥 Trending</h2>
+        <p>See what’s trending globally and locally. Visit the Trending page for more.</p>
+        <a class="btn-main" href="{% url 'trending' %}">View Trending</a>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="section-block">
+        <h2>📂 Top Categories</h2>
+        <p>Browse news by category for your favorite topics.</p>
+        <a class="btn-main" href="{% url 'categories' %}">Explore Categories</a>
+    </section>
+
 </div>
-    {% endfor %}
-{% else %}
-<p>No API news available.</p>
-{% endif %}
- 
+
 {% endblock %}

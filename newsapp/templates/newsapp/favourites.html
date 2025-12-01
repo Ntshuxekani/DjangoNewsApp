@@ -1,0 +1,49 @@
+{% extends "newsapp/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <h1 class="page-title">❤️ Your Favourite Articles</h1>
+    <p class="intro-text">These are the stories you saved for later.</p>
+
+    {% if favourites %}
+        <div class="news-grid">
+            {% for article in favourites %}
+                <div class="news-card">
+
+                    {% if article.urlToImage %}
+                        <img src="{{ article.urlToImage }}" class="news-image" alt="Favourite Image">
+                    {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="news-image" alt="No Image">
+                    {% endif %}
+
+                    <h3>{{ article.title }}</h3>
+
+                    {% if article.description %}
+                        <p>{{ article.description }}</p>
+                    {% else %}
+                        <p>No description available.</p>
+                    {% endif %}
+
+                    <div class="card-actions">
+                        <a href="{{ article.url }}" target="_blank" class="btn-main">
+                            Read Full Article
+                        </a>
+
+                        <a href="{% url 'remove_favourite' article.id %}" class="btn-delete">
+                            Remove ❌
+                        </a>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="empty-message">You haven't added any favourites yet.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
