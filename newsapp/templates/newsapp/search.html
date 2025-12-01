@@ -1,0 +1,49 @@
+{% extends "newsapp/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-container">
+
+    <h1 class="page-title">🔍 Search Results</h1>
+
+    <form method="GET" class="search-bar">
+        <input type="text" name="query" placeholder="Search news..." value="{{ request.GET.query }}">
+        <button type="submit" class="btn-main">Search</button>
+    </form>
+
+    {% if query %}
+        <p class="intro-text">You searched for: <strong>{{ query }}</strong></p>
+    {% endif %}
+
+    {% if results %}
+        <div class="news-grid">
+            {% for article in results %}
+                <div class="news-card">
+
+                    {% if article.urlToImage %}
+                        <img src="{{ article.urlToImage }}" class="news-image" alt="Article Image">
+                    {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="news-image" alt="No Image">
+                    {% endif %}
+
+                    <h3>{{ article.title }}</h3>
+
+                    <p>{{ article.description|default:"No description available." }}</p>
+
+                    <div class="card-actions">
+                        <a href="{{ article.url }}" target="_blank" class="btn-main">Read Article</a>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        {% if query %}
+            <p class="empty-message">No results found for your search.</p>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+{% endblock %}
