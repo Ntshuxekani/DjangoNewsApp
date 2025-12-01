@@ -128,7 +128,7 @@ def add_favorite(request, article_id):
     return redirect("favourites")
 
 
-def remove_favorite(request, article_id):
+def remove_favourite(request, article_id):
     favs = request.session.get("favorites", [])
     if article_id in favs:
         favs.remove(article_id)
