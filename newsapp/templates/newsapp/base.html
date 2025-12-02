@@ -11,15 +11,20 @@
 
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar">
-    <h2 class="sidebar-title">Yinhla Yerhu</h2>
+    <div class="sidebar-header">
+        <h2 class="sidebar-title">Yinhla Yerhu</h2>
+    </div>
 
-    <a href="{% url 'home' %}"> Home</a>
-    <a href="{% url 'all_news' %}"> All News</a>
-    <a href="{% url 'categories' %}"> Categories</a>
-    <a href="{% url 'trending' %}"> Trending</a>
-    <a href="{% url 'favourites' %}"> Favorites</a>
-    <a href="{% url 'subscribe' %}"> Subscribe</a>
+    <div class="sidebar-links">
+        <a href="{% url 'home' %}">🏠 Home</a>
+        <a href="{% url 'all_news' %}">📰 All News</a>
+        <a href="{% url 'categories' %}">📂 Categories</a>
+        <a href="{% url 'trending' %}">🔥 Trending</a>
+        <a href="{% url 'favourites' %}">⭐ Favorites</a>
+        <a href="{% url 'subscribe' %}">🔔 Subscribe</a>
+    </div>
 </div>
+
 
 <!-- Top Bar (Mobile + Dark Mode + Collapse Button) -->
 <div class="top-bar">
