@@ -128,5 +128,24 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
 #STATICFILES_DIRS = [BASE_DIR / 'static']
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 DEFAULT_FROM_EMAIL = "newsapp <no-reply@zanews.com>"
+
+#email backend
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = "pearl.mp.mahlangu@gmail.com"
+EMAIL_HOST_PASSWORD = "odpo yvli pdge agzc"
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+
+
+
+
+

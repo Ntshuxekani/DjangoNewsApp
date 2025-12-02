@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.utils import timezone
 from .models import NewsArticle, Category, BreakingAlert
 from .utils import fetch_api_news, fetch_category_news, fetch_trending_news
+from django.conf import settings
+from django.core.mail import send_mail
 
 def home(request):
     api_news = fetch_api_news()  # this now works correctly
@@ -115,15 +117,34 @@ def favourites(request):
 
 subscribers = []
 
+from django.core.mail import send_mail
+
 def subscribe(request):
     if request.method == "POST":
         email = request.POST.get("email", "").strip()
-        if email:
-            subscribers.append(email)
-            messages.success(request, "Thank you for subscribing! 🎉")
-        else:
-            messages.error(request, "Please enter a valid email.")
+
+        if not email:
+            messages.error(request, "Please enter a valid email address.")
+            return redirect("subscribe")
+
+        # Save subscriber
+        subscribers.append(email)
+
+        # Send confirmation email
+        send_mail(
+            subject="Thank you for subscribing!",
+            message="You will now receive the latest news updates from our platform.",
+            from_email=settings.EMAIL_HOST_USER,
+
+            recipient_list=[email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "Subscription successful! Check your email ✔")
+        return redirect("subscribe")
+
     return render(request, "newsapp/subscribe.html")
+
 
 def categories(request):
     category_data = {
