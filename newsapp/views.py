@@ -9,43 +9,49 @@ from .models import NewsArticle, Category, BreakingAlert
 from .utils import fetch_api_news, fetch_category_news, fetch_trending_news
 
 def home(request):
-    api_news = fetch_api_news()  # this now works correctly
-
-    search_query = request.GET.get("q", "")
+    query = request.GET.get("q", "").strip()
     sort = request.GET.get("sort", "newest")
     category_id = request.GET.get("category", "")
     page = request.GET.get("page", 1)
 
-    articles_qs = NewsArticle.objects.filter(is_published=True)
+    # Fetch DB news
+    db_news = NewsArticle.objects.filter(is_published=True)
 
-    # Search filter
-    if search_query:
-        articles_qs = articles_qs.filter(
-            Q(title__icontains=search_query) |
-            Q(content__icontains=search_query)
+    if query:
+        db_news = db_news.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
         )
-
-    # Category filter
-    if category_id:
-        articles_qs = articles_qs.filter(category_id=category_id)
-
-    # Sorting
-    if sort == "oldest":
-        articles_qs = articles_qs.order_by("created_at")
-    elif sort == "most_viewed":
-        articles_qs = articles_qs.order_by("-views")
-    elif sort == "most_liked":
-        articles_qs = articles_qs.order_by("-likes_count")
+        # Also fetch API search results
+        api_news = fetch_api_news(query)
     else:
-        articles_qs = articles_qs.order_by("-created_at")
+        # Default homepage API headlines
+        api_news = fetch_api_news()
 
-    paginator = Paginator(articles_qs, 6)
+    # Filter by category
+    if category_id:
+        db_news = db_news.filter(category_id=category_id)
+
+    # Sorting options
+    if sort == "oldest":
+        db_news = db_news.order_by("created_at")
+    elif sort == "most_viewed":
+        db_news = db_news.order_by("-views")
+    elif sort == "most_liked":
+        db_news = db_news.order_by("-likes_count")
+    else:
+        db_news = db_news.order_by("-created_at")
+
+    # Pagination
+    paginator = Paginator(db_news, 6)
     articles = paginator.get_page(page)
 
+    # Sidebar content
     categories = Category.objects.all()
     trending = NewsArticle.objects.filter(is_published=True).order_by("-views")[:5]
     latest = NewsArticle.objects.filter(is_published=True).order_by("-created_at")[:5]
 
+    # Favorites stored in session
     favourite_ids = request.session.get("favorites", [])
     favourite_articles = NewsArticle.objects.filter(id__in=favourite_ids)
 
@@ -59,14 +65,12 @@ def home(request):
         "latest": latest,
         "favorite_articles": favourite_articles,
         "breaking_alert": breaking_alert,
-        "search_query": search_query,
+        "search_query": query,
         "selected_category": category_id,
         "sort": sort,
-        "paginator": paginator,
     }
 
     return render(request, "newsapp/home.html", context)
-
 def article_detail(request, pk):
     article = get_object_or_404(NewsArticle, pk=pk, is_published=True)
 
