@@ -64,3 +64,14 @@ class Like(models.Model):
 
     def __str__(self):
         return f'Like: {self.article.title}'
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=500)
+    urlToImage = models.CharField(max_length=500, null=True, blank=True)
+    is_favourite = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title

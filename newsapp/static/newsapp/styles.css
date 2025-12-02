@@ -344,3 +344,19 @@ body.dark-mode .top-bar {
     background: #0f172a;
 }
 
+.news-image {
+  width: 150px;     
+  height: 150px;     
+  border-radius: 12px; 
+  object-fit: cover;  
+}
+
+.fav-icon {
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.fav-icon.active {
+    color: hotpink;
+}
