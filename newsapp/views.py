@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.utils import timezone
 from .models import NewsArticle, Category, BreakingAlert
 from .utils import fetch_api_news, fetch_category_news, fetch_trending_news
+from django.shortcuts import redirect, get_object_or_404
+from .models import Article
 
 def home(request):
     query = request.GET.get("q", "").strip()
@@ -163,3 +165,13 @@ def search(request):
         "results": results
     })
 
+
+def toggle_favourite(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    article.is_favourite = not article.is_favourite
+    article.save()
+    return redirect('all_news')
+
+def favourites_list(request):
+    favourites = Article.objects.filter(is_favourite=True)
+    return render(request, 'newsapp/favourites.html', {'favourites': favourites})
