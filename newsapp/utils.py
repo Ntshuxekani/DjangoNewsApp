@@ -1,6 +1,6 @@
 import requests
 
-API_KEY = "f6ba60fd2f9c45808cc8b4fb7e27bd25"
+API_KEY = "6d8dc587c10b44fd91632de4297ddeea"
 BASE_URL = "https://newsapi.org/v2"
 
 
